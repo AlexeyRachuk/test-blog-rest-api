@@ -1,0 +1,5 @@
+<ul class="tm-mb-75 pl-5 tm-category-list">
+    {% for categories in category_all %}
+    <li><a href="/blog/category/{{ categories.category_slug }}" class="tm-color-primary">{{ categories.category_title }}</a></li>
+    {% endfor %}
+</ul>

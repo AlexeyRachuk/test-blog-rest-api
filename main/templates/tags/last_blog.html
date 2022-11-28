@@ -1,0 +1,8 @@
+{% for last_blog in last_blog_all %}
+<a href="/blog/{{ last_blog.post_slug }}" class="d-block tm-mb-40">
+    <figure>
+        <img src="{{ last_blog.post_thumb_image.url }}" alt="Image" class="mb-3 img-fluid">
+        <figcaption class="tm-color-primary">{{ last_blog.post_title }}</figcaption>
+    </figure>
+</a>
+{% endfor %}

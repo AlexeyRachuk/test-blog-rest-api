@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row tm-row">
+    {% for post in post_list %}
+    <article class="col-12 col-md-6 tm-post">
+        <hr class="tm-hr-primary">
+        <a href="{{ post.get_absolute_url }}" class="effect-lily tm-post-link tm-pt-60">
+            <div class="tm-post-link-inner">
+                <img src="{{ post.post_thumb_image.url }}" alt="Image" class="img-fluid">
+            </div>
+            <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ post.post_title }}</h2>
+        </a>
+        <p class="tm-pt-30">
+            {{ post.post_thumb_text }}
+        </p>
+        <div class="d-flex justify-content-between tm-pt-45">
+            <span class="tm-color-primary">{{ post.post_category.category_title }}</span>
+            <span class="tm-color-primary">{{ post.post_date }}</span>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between">
+            {% with comments.count as total_comments %}
+  <h2>
+    {{ total_comments }} comment{{ total_comments|pluralize }}
+  </h2>
+{% endwith %}
+            <span>36 comments</span>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+<div class="row tm-row tm-mt-100 tm-mb-75">
+    {% if page_obj.has_other_pages %}
+    <div class="tm-prev-next-wrapper">
+        {% if page_obj.has_previous %}
+        <a href="?{{ q }}&page={{ page_obj.previous_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Пред.</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a href="?{{ q }}&page={{ page_obj.next_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">След.</a>
+        {% endif %}
+    </div>
+    <div class="tm-paging-wrapper">
+        <span class="d-inline-block mr-3">Страницы</span>
+        <nav class="tm-paging-nav d-inline-block">
+            <ul>
+                {% for p in paginator.page_range %}
+                {% if page_obj.number == p %}
+                <li class="tm-paging-item active">
+                    <a href="?{{ q }}&page={{ p }}" class="mb-2 tm-btn tm-paging-link">{{ p }}</a>
+                </li>
+                {% elif p >= page_obj.number|add:-1 and p <= page_obj.number|add:2 %}
+                <li class="tm-paging-item">
+                    <a href="?page={{ p }}" class="mb-2 tm-btn tm-paging-link">{{ p }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

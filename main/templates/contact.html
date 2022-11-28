@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for contact in contacts %}
+<div class="row tm-row tm-mb-45">
+    <div class="col-12">
+        <hr class="tm-hr-primary tm-mb-55">
+        <div class="gmap_canvas"> <!-- Google Map -->
+            {{ contact.contact_map|safe }}
+        </div>
+    </div>
+</div>
+<div class="row tm-row tm-mb-120">
+    <div class="col-12">
+        <h2 class="tm-color-primary tm-post-title tm-mb-60">Написать нам</h2>
+    </div>
+    <div class="col-lg-7 tm-contact-left">
+        <form method="POST" class="mb-5 ml-auto mr-0 tm-contact-form">
+            {% csrf_token %}
+            <div class="form-group row mb-4">
+                {{ form.form_name }}
+            </div>
+            <div class="form-group row mb-4">
+                {{ form.form_email }}
+            </div>
+            <div class="form-group row mb-5">
+                {{ form.form_text }}
+            </div>
+            <div class="form-group row text-right">
+                <div class="col-12">
+                    <button class="tm-btn tm-btn-primary tm-btn-small" type="submit">Отправить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-5 tm-contact-right">
+        <address class="mb-4 tm-color-gray">
+            {{ contact.contact_address }}
+        </address>
+        <span class="d-block">
+                        Tel:
+                        <a href="tel:" class="tm-color-gray">{{ contact.contact_tel }}</a>
+                    </span>
+        <span class="mb-4 d-block">
+                        Email:
+                        <a href="{{ contact.contact_mail }}" class="tm-color-gray">{{ contact.contact_mail }}</a>
+                    </span>
+        <ul class="tm-social-links">
+            {% if contact.contact_fb %}
+            <li class="mb-2">
+                <a href="{{ contact.contact_fb }}" class="d-flex align-items-center justify-content-center">
+                    <i class="fab fa-facebook"></i>
+                </a>
+            </li>
+            {% endif %}
+            {% if contact.contact_tw %}
+            <li class="mb-2">
+                <a href="{{ contact.contact_tw }}" class="d-flex align-items-center justify-content-center">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </li>
+            {% endif %}
+            {% if contact.contact_yt %}
+            <li class="mb-2">
+                <a href="{{ contact.contact_yt }}" class="d-flex align-items-center justify-content-center">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </li>
+            {% endif %}
+            {% if contact.contact_inst %}
+            <li class="mb-2">
+                <a href="{{ contact.contact_inst }}" class="d-flex align-items-center justify-content-center mr-0">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
+{% endblock content %}
