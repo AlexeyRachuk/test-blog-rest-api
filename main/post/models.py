@@ -46,10 +46,13 @@ class Post(models.Model):
 
 class Comments(models.Model):
     """Модель комментариев"""
-    comment_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comment', verbose_name='Пост')
+    comment_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', verbose_name='Пост',
+                                     null=True, blank=True)
     comment_name = models.CharField('Имя', max_length=100)
     comment_text = models.TextField('Текст')
     comment_date = models.DateField(default=date.today)
+    comment_parent = models.ForeignKey('self', verbose_name='Коментарий для ответа', on_delete=models.SET_NULL,
+                                       blank=True, null=True, related_name='child')
 
     def __str__(self):
         return self.comment_name
@@ -57,6 +60,3 @@ class Comments(models.Model):
     class Meta:
         verbose_name = "Комментарий"
         verbose_name_plural = "Комментарий"
-
-
-

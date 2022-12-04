@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 from rest_framework import generics, viewsets
+from django.views.generic.base import View
 
 from post.models import Post, Comments
 from post.forms import FormComments
@@ -34,23 +35,6 @@ class BlogDetailView(DetailView):
     context_object_name = 'post'
 
 
-"""Возможность оставить комментарий"""
-
-
-def post_comment(self):
-    comments = Comments.comment_post.comment
-    new_comment = None
-    if self.method == 'POST':
-        form = FormComments(self.POST)
-        if form.is_valid():
-            new_comment = form.save(commit=False)
-            new_comment.post = Comments.comment_post
-            new_comment.save()
-    else:
-        form = FormComments()
-    return render(self, 'post.html', {'comments': comments, 'new_comment': new_comment, 'form': form})
-
-
 """Категории поста"""
 
 
@@ -81,3 +65,34 @@ class AllBlogAPIView(viewsets.ModelViewSet):
 class AllCommentsAPIView(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
     serializer_class = AllPostComments
+
+
+"""Комментрирование"""
+
+
+class AddComment(View):
+    def post(self, request, pk):
+        form = FormComments(request.POST)
+        comment_post = Post.objects.get(id=pk)
+        if form.is_valid():
+            form = form.save(commit=False)
+            if request.POST.get("comment_parent", None):
+                form.parent_id = int(request.POST.get("comment_parent"))
+            form.comment_post = comment_post
+            form.save()
+        return redirect(comment_post.get_absolute_url())
+
+
+class Search(ListView):
+    """Поиск по статьям"""
+    paginate_by = 9
+    template_name = 'index.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query').capitalize()
+        return Post.objects.filter(post_title__icontains=query)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['query'] = f'query={self.request.GET.get("query")}&'
+        return context

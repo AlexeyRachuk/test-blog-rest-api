@@ -18,14 +18,6 @@
             <span class="tm-color-primary">{{ post.post_date }}</span>
         </div>
         <hr>
-        <div class="d-flex justify-content-between">
-            {% with comments.count as total_comments %}
-  <h2>
-    {{ total_comments }} comment{{ total_comments|pluralize }}
-  </h2>
-{% endwith %}
-            <span>36 comments</span>
-        </div>
     </article>
     {% endfor %}
 </div>
@@ -33,10 +25,10 @@
     {% if page_obj.has_other_pages %}
     <div class="tm-prev-next-wrapper">
         {% if page_obj.has_previous %}
-        <a href="?{{ q }}&page={{ page_obj.previous_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Пред.</a>
+        <a href="?{{ query }}&page={{ page_obj.previous_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Пред.</a>
         {% endif %}
         {% if page_obj.has_next %}
-        <a href="?{{ q }}&page={{ page_obj.next_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">След.</a>
+        <a href="?{{ query }}&page={{ page_obj.next_page_number }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">След.</a>
         {% endif %}
     </div>
     <div class="tm-paging-wrapper">
@@ -46,7 +38,7 @@
                 {% for p in paginator.page_range %}
                 {% if page_obj.number == p %}
                 <li class="tm-paging-item active">
-                    <a href="?{{ q }}&page={{ p }}" class="mb-2 tm-btn tm-paging-link">{{ p }}</a>
+                    <a href="?{{ query }}&page={{ p }}" class="mb-2 tm-btn tm-paging-link">{{ p }}</a>
                 </li>
                 {% elif p >= page_obj.number|add:-1 and p <= page_obj.number|add:2 %}
                 <li class="tm-paging-item">
