@@ -6,6 +6,7 @@ WORKDIR /home/root/projects/rest-api-blog/blog/
 COPY ./requirements.txt ./requirements.txt
 
 RUN pip3 install -r ./requirements.txt
+RUN mkdir ./static
 
 COPY . .
 
