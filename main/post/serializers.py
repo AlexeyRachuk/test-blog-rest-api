@@ -29,13 +29,18 @@ class AllPostComments(serializers.ModelSerializer):
 
 
 class PostComments(serializers.ModelSerializer):
-    child = RecursiveSerializer(many=True)
-    """Вывод комментов поста, для удобства и описания вложенности"""
+    child = RecursiveSerializer(many=True, required=False, allow_null=None)
 
     class Meta:
         list_serializer_class = FilterReviewListSerializer
         model = Comments
         fields = ['comment_name', 'comment_text', 'comment_date', 'child']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if not data.get('child'):
+            data['child'] = None
+        return data
 
 
 class AllPostSerializer(serializers.ModelSerializer):
